@@ -9,6 +9,13 @@ object Dependencies {
     val json4s = "3.5.3"
   }
 
+  val circeVersion = "0.9.1"
+  val circe=Seq(
+    "io.circe" %% "circe-core",
+    "io.circe" %% "circe-generic",
+    "io.circe" %% "circe-parser"
+  ).map(_ % circeVersion)
+
   val akka = Seq(
     "com.typesafe.akka" %% "akka-stream" % Versions.akka,
     "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka % "test",
@@ -18,7 +25,7 @@ object Dependencies {
   val flink = Seq(
     "org.apache.flink" %% "flink-scala" % Versions.flink,
     "org.apache.flink" %% "flink-streaming-scala" % Versions.flink
-  )
+  ) ++ circe
 
   val spark = Seq(
     "org.apache.spark" %% "spark-core" % Versions.spark,
