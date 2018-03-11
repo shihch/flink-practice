@@ -16,6 +16,16 @@ object Dependencies {
     "io.circe" %% "circe-parser"
   ).map(_ % circeVersion)
 
+  val logback=Seq(
+    "ch.qos.logback" % "logback-classic" % "1.2.3" % Test
+  )
+
+  val scalatest=Seq(
+    "junit" % "junit" % "4.12" % Test,
+    "org.scalactic" %% "scalactic" % "3.0.5",
+    "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  )
+
   val akka = Seq(
     "com.typesafe.akka" %% "akka-stream" % Versions.akka,
     "com.typesafe.akka" %% "akka-stream-testkit" % Versions.akka % "test",
@@ -25,7 +35,7 @@ object Dependencies {
   val flink = Seq(
     "org.apache.flink" %% "flink-scala" % Versions.flink,
     "org.apache.flink" %% "flink-streaming-scala" % Versions.flink
-  ) ++ circe
+  ) ++ circe ++ logback ++ scalatest
 
   val spark = Seq(
     "org.apache.spark" %% "spark-core" % Versions.spark,
