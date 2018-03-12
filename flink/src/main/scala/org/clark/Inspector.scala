@@ -21,7 +21,7 @@ object Inspector {
   
   def raiseAlert(acct:Account):Option[Spammer] = {
     if (checkBadIP(acct.fromIp))
-      Some(Spammer(acct.id,s"It is created from a known bad ip: ${acct.fromIp}"))
+      Some(Spammer(acct.id,acct.fromIp,"ip"))
     else
       None
   }

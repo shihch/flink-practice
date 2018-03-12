@@ -5,6 +5,7 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 import org.slf4j.LoggerFactory
+import org.apache.flink.api.java.utils.ParameterTool
 
 class RuleProcessFunction extends ProcessWindowFunction[TimedEvent, String, Long, TimeWindow] {
   import collection.mutable.ListBuffer
@@ -13,7 +14,8 @@ class RuleProcessFunction extends ProcessWindowFunction[TimedEvent, String, Long
   override def process(key: Long, context: Context, elements: Iterable[TimedEvent], out: Collector[String]): Unit = {
     val filters = Spammy.filters
     var countUsers = 0
-    val countLimit = 20
+    val param=getRuntimeContext.getExecutionConfig.getGlobalJobParameters.asInstanceOf[ParameterTool]
+    val countLimit = param.getInt("account_limit")
     val risks = ListBuffer.empty[Spammer]
     
     for (ev <- elements) {
@@ -28,11 +30,20 @@ class RuleProcessFunction extends ProcessWindowFunction[TimedEvent, String, Long
       }
     }
     if (countUsers > countLimit) {
-      risks.append(Spammer(key,s"Account has $countUsers users, more than $countLimit"))
+      risks.append(Spammer(key,s"$countUsers","account"))
     }
     if (risks.size > 0){  
       val printout=risks.foldLeft(s"Account $key is risky because \n"){
-        (s,r) => s + s"\t- ${r.alert} \n"
+        (s,spam) => spam.atype match {
+          case "word" =>
+            s + s"  - It created a spammy ticket with '${spam.alert}' word(s) in it\n"
+          case "link" =>
+            s + s"  - It created a spammy ticket with '${spam.alert}' link\n"
+          case "account" =>
+            s + s"  - Account has ${spam.alert} users, exceed limit $countLimit\n"
+          case "ip" =>
+            s + s"  - It is created from a known bad ip: ${spam.alert}\n"
+        }
       }
     
       out.collect(printout)

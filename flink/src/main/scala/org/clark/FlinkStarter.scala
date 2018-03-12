@@ -12,6 +12,7 @@ import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
 import org.apache.flink.streaming.api.functions.AssignerWithPunctuatedWatermarks
 import org.apache.flink.streaming.api.watermark.Watermark
+import org.apache.flink.api.java.utils.ParameterTool
 
 
 object FlinkStarter {
@@ -19,12 +20,17 @@ object FlinkStarter {
   val accounts_threshold = 20
 
   def main(args: Array[String]): Unit = {
+    
+    val parameters=ParameterTool.fromPropertiesFile(ClassLoader.getSystemResourceAsStream("job.properties"))
+    //println(parameters.getInt("account_limit"))
+    
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
+    env.getConfig.setGlobalJobParameters(parameters)
 
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
 
     // get input data by connecting to the socket
-    val text = env.socketTextStream("localhost", 9000, '\n')
+    val text = env.socketTextStream(parameters.get("host"), parameters.getInt("port"), '\n')
     
     val parsedStream = text.flatMap { line =>
       JsonParse.parseEvent(line)

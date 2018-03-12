@@ -30,13 +30,19 @@ class SpammyTest extends FunSuite {
 
   }
   
-  test("combined any filter") {
+  test("combined filters") {
     val filter=Spammy(
-      any(Seq(wordFilter("xyz"),domainFilter("goo.le")))
-    )
-    
+      any(Seq(wordFilter("xyz"),domainFilter("goo.le"),
+          every(Seq(wordFilter("good"), wordFilter("friend"))){_+_}
+         )
+      )
+    )   
     var sp=filter(Ticket(1, 31341000, 3, "test ticket with link xyz."))
     assert(!sp.isEmpty)
+    
+    sp = filter(Ticket(1,45235,5,"good bye my friend."))
+    assert(!sp.isEmpty)
+    println(sp)
   }
 
 }

@@ -10,7 +10,12 @@ trait FilterComposer {
       if (stream.isEmpty) None
       else Option(stream.head)
     }
-  
+  def every[A,B](predicates: =>Seq[A => Option[B]])(reducer: =>(B,B)=>B):A=>Option[B] =
+    a => {
+      val all=predicates.flatMap(f=>f(a))
+      if (all.size == predicates.size) Some(all.reduce(reducer))
+      else None
+    }
 }
 
 object Spammy extends FilterComposer {
@@ -47,7 +52,7 @@ object Spammy extends FilterComposer {
   def wordFilter: String=>TicketFilter = {word =>
     t => {
       if (withWord(t.content)(word))
-        Some(Spammer(t.accountId,s"It created a spammy ticket with $word word in it"))
+        Some(Spammer(t.accountId,word))
       else None
     }
       
@@ -56,13 +61,15 @@ object Spammy extends FilterComposer {
   def domainFilter: String=>TicketFilter = {domain =>
     t => {
       if (withDomain(t.content)(domain))
-        Some(Spammer(t.accountId,s"It created a spammy ticket with $domain link"))
+        Some(Spammer(t.accountId,domain,"link"))
       else None
     }
   }
   
   val filters=any(
-      Seq(domainFilter("bit.ly"), wordFilter("Apple"), wordFilter("Paypal"), wordFilter("reset password"))
+      Seq(domainFilter("bit.ly"), wordFilter("Apple"), wordFilter("Paypal"), 
+          every(Seq(wordFilter("reset"), wordFilter("password"))){_+_}
+      )
   )
   
   val unit:TicketFilter = t=>None
