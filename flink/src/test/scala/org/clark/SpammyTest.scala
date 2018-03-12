@@ -35,7 +35,7 @@ class SpammyTest extends FunSuite {
       any(Seq(wordFilter("xyz"),domainFilter("goo.le")))
     )
     
-    var sp=filter(Ticket(1, new Timestamp(314341), 3, "test ticket with link xyz."))
+    var sp=filter(Ticket(1, 31341000, 3, "test ticket with link xyz."))
     assert(!sp.isEmpty)
   }
 

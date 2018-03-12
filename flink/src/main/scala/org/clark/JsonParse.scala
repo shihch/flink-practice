@@ -22,21 +22,21 @@ object JsonParse {
       dataType <- cursor.downField("data_type").as[String]
       id <- cursor.downField("id").as[Long]
       time <- cursor.downField("created_at").as[Long]
-      created = new Timestamp(time)
+      //created = new Timestamp(time)
     } yield {
       val obj=dataType match {
         case "user" => 
-          for (aid<-cursor.downField("account_id").as[Long]) yield Some(User(id,created,aid))
+          for (aid<-cursor.downField("account_id").as[Long]) yield Some(User(id,time,aid))
         case "account" =>
           for {
             aType<-cursor.downField("type").as[String]
             fromIp<-cursor.downField("created_from_ip").as[String]
-          } yield Some(Account(id,created,aType,fromIp))
+          } yield Some(Account(id,time,aType,fromIp))
         case "ticket" =>
           for {
             aid<-cursor.downField("account_id").as[Long]
             content<-cursor.downField("content").as[String]
-          } yield Some(Ticket(id,created,aid,content))
+          } yield Some(Ticket(id,time,aid,content))
         case _ => Left(DecodingFailure("unknown type",List.empty))
       }
       obj
