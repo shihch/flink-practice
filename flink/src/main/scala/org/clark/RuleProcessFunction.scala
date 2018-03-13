@@ -13,7 +13,7 @@ import org.apache.flink.configuration.Configuration
 import collection.mutable.ListBuffer
 
 /* this class is refactored to two classes */
-/*
+
 class RuleProcessFunction extends ProcessWindowFunction[TimedEvent, String, Long, TimeWindow] {
 
   val log = LoggerFactory.getLogger(this.getClass)
@@ -74,7 +74,7 @@ class RuleProcessFunction extends ProcessWindowFunction[TimedEvent, String, Long
     }
   }
 }
-*/
+
 
 
 /**
