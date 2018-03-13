@@ -19,11 +19,9 @@ import org.apache.flink.runtime.state.memory.MemoryStateBackend
 
 object FlinkStarter {
 
-  val accounts_threshold = 20
-
   def main(args: Array[String]): Unit = {
 
-    val parameters = ParameterTool.fromPropertiesFile(ClassLoader.getSystemResourceAsStream("job.properties"))
+    val parameters = ParameterTool.fromPropertiesFile(getClass.getResourceAsStream("/job.properties"))
     //println(parameters.getInt("account_limit"))
 
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
