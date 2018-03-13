@@ -13,12 +13,12 @@ lazy val akka = (project in file("akka_streams")).settings(
 
 lazy val flink = (project in file("flink")).settings(
   inThisBuild(List(
-    organization := "com.zendesk",
+    organization := "org.clark",
     scalaVersion := "2.11.8"
   )),
   name := "rules-engine",
   version := "1.0.0",
-  mainClass in Compile := Some("com.zendesk.FlinkRulesEngine"),
+  mainClass in Compile := Some("org.clark.FlinkStarter"),
   libraryDependencies ++= Dependencies.flink
 
 )
