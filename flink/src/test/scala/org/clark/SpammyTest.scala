@@ -10,10 +10,10 @@ class SpammyTest extends FunSuite {
 
   import Spammy._
   test("test spammy word") {
-    assert(withWord("The Apple campus is new.")("Apple"))
-    assert(withWord("Apple campus is good.")("Apple"))
+    assert(withWord("The Apple campus is new.")("apple"))
+    assert(withWord("apple campus is good.")("Apple"))
     assert(!withWord("Orange campus is bad.")("Apple"))
-    assert(withWord("Orange campus is not Apple.2")("Apple"))
+    assert(withWord("Orange campus is not Apple.2")("apple"))
     assert(withWord("Orange campus is not Apple 2.")("Apple 2"))
     assert(!withWord("欢迎来到zendesk and welcome!")("zendesk"))
     assert(!withWord("It is my pleasure -Apple")("Apple"))
@@ -21,9 +21,9 @@ class SpammyTest extends FunSuite {
 
   test("test spammy domain") {
 
-    assert(withDomain("dkfdalhttp://bit.ly/gbajlfb")("bit.ly"))
+    assert(withDomain("dkfdalhttp://bit.Ly/gbajlfb")("bit.ly"))
     assert(withDomain("dkfdal http://bit.ly.")("bit.ly"))
-    assert(withDomain("dkfdalhttps://www.bit.ly/gbajlfb")("bit.ly"))
+    assert(withDomain("dkfdalhttps://www.bit.ly/gbajlfb")("Bit.ly"))
     assert(withDomain("http://bit.ly/gba#$jlfb")("bit.ly"))
     assert(!withDomain("abc http://sub.bit.ly/gba#$jlfb xyz")("bit.ly"))
     assert(withDomain("abc http://bit.ly/gba#$jlfb xyz")("bit.ly"))
@@ -42,7 +42,7 @@ class SpammyTest extends FunSuite {
     
     sp = filter(Ticket(1,45235,5,"good bye my friend."))
     assert(!sp.isEmpty)
-    println(sp)
+    //println(sp)
   }
 
 }

@@ -25,7 +25,7 @@ object Spammy extends FilterComposer {
     
   def withWord(s:String)(word:String):Boolean = {
     //note: ?<= look behind, ?= look ahead
-    val pattern = "(?<=^|\\s)"+word+"(?=\\s|$|\\.)"    
+    val pattern = "(?<=^|\\s)(?i)"+word+"(?-i)(?=\\s|$|\\.)"    
     val regex = pattern.r
     
     regex.findFirstIn(s) match {
@@ -38,7 +38,7 @@ object Spammy extends FilterComposer {
 
   
   def withDomain(s:String)(domain:String) = {
-    val pattern="(?<=http(s)?:\\/\\/)(www\\.)?"+domain+"(?=\\/|\\s|$|\\.)"
+    val pattern="(?<=http(s)?:\\/\\/)(www\\.)?(?i)"+domain+"(?-i)(?=\\/|\\s|$|\\.)"
     val regex = pattern.r
     regex.findFirstIn(s) match {
       case Some(d) => 
