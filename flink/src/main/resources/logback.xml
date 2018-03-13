@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 	-->
-	<logger name="org.clark" level="debug" />
+	<logger name="org.clark" level="info" />
     <root level="warn">
         <appender-ref ref="STDOUT" />
         <!-- appender-ref ref="FILE" /-->
