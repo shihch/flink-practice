@@ -12,7 +12,7 @@ To run the unit tests:
 sbt "flink/test"
 ```
 logback to provide logging facility.
-Some configuration properties are in the src/main/resources/job.properties.
+Some configuration properties are in the src/main/resources/job.properties. Use "twindow_time*" properties to adjust tumbling window size.
 
 ### Design Review
 
