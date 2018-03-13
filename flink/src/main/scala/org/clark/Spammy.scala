@@ -18,6 +18,9 @@ trait FilterComposer {
     }
 }
 
+/**
+ * helper object to create Ticket content checkers
+ */
 object Spammy extends FilterComposer {
   type TicketFilter = Ticket => Option[Spammer] 
   

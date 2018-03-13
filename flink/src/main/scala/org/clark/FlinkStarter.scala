@@ -50,19 +50,8 @@ object FlinkStarter {
         case e: User => e.accountId
         case e: Ticket => e.accountId
       }
-    }.window(tWindow).process(new RuleProcessFunction)
-
-    /*
-    val ticketStream = parsedStream.filter { ev => ev.isInstanceOf[Ticket] }.map { e => e.asInstanceOf[Ticket] }
-    val userStream = parsedStream.filter(ev => ev.isInstanceOf[User]).map(e => e.asInstanceOf[User])
-    val accountStream = parsedStream.filter(ev => ev.isInstanceOf[Account]).map(e => e.asInstanceOf[Account])
-
-    val badUsers = userStream.map(u => (u.accountId, 1)).keyBy(0).sum(1) //.filter(_._2>accounts_threshold)
-
-    val badTickets = ticketStream.flatMap { t => Spammy.filters(t) }
-
-    val badAcct = accountStream.flatMap(acct => Inspector.raiseAlert(acct))
-    */
+    }.window(tWindow).aggregate(new FilterFunction, new SpamReportFunction)
+    //.process(new RuleProcessFunction)
 
     accounts.print().setParallelism(1)
 
